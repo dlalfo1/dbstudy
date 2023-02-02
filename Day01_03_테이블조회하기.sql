@@ -10,7 +10,7 @@
         [WHERE 조건식] 
         [GROUP BY 그룹화할칼럼 [HAVING 그룹조건식] - HAVING은 GROUP BY가 나와야 사용 가능하다.
         [ORDER BY 정렬할칼럼 정렬방식]   
-    6. 순서 (FROM -> WHERE -> SELECT-> ORDER) - 실제 쿼리를 적을 때 쓰는 순서가 아니라 처리되는 순서이다.
+    6. 순서 (FROM -> WHERE -> SELECT-> ORDER) - 실제 쿼리를 짤 때 쓰는 순서가 아니라 처리되는 순서이다.
         ④ SELECT 조회할칼럼, 조회할칼럼, 조회할칼럼, ... 
         ① FROM 테이블이름   
         ② [WHERE 조건식] 
@@ -61,11 +61,10 @@ SELECT EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO
   FROM EMP;
 
 -- 3. 동일한 데이터는 한 번만 조회하기
-SELECT DISTINCT JOB -- DISTINCT 중복값 제거하기 (JOB 칼럼 가져올 때 중복된 값을 제거해준다.)  
+SELECT DISTINCT JOB -- DISTINCT 중복값 제거하기 (JOB 칼럼 가져올 때 중복된 값을 제거해준다.) DISTINCT : 확실한
  FROM EMP;
 
 -- 4. JOB이 MANAGER인 사원 목록 조회하기
-
 SELECT EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO
   FROM EMP
  WHERE JOB = 'MANAGER'; -- 오라클에서 같다는 = 한개.
@@ -91,7 +90,8 @@ SELECT EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO
   FROM EMP
  WHERE COMM IS NOT NULL -- NULL 체크의 방법은 별도의 방법이 있다.
    AND COMM != 0;       -- 0은 != 기호로 체크할 수 있다.   
-                                      
+-- COMM 값이 NULL이 아니고 0이 아닐 때 데이터를 불러 와라.
+
 -- 8. ENAME이 A로 시작하는 사원 목록 조회하기
 --    1) WILD CARD (보통 % 쓴다.)
 --       (1) % : 모든 문자, 글자 수 제한 없은 모든 문자
