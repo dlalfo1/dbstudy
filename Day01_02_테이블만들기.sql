@@ -29,14 +29,23 @@
 */
 
 /*
-    제약조건(Constraint) - 5개 중 3개 
+    제약조건(Constraint) - 
     1. 널
         1) NULL 또는 생략
         2) NOT NULL
-    2. 중복 데이터 방지 - 데이터가 중복이 되면 안 될 때 사용한다. ex) 주민등록번호
+    2. 중복 데이터 방지 - 데이터가 중복 되면 안 될 때 사용한다. ex) 주민등록번호
         UNIQUE 
     3. 값의 제한 - 특정한 값이 들어가면 안될 때 사용한다. 값의 범위를 지정해준다고 생각하면 될 것 같다.
         CHECK
+    4. 개체 무결성 - 테이블 데이터를 식별할 수 있는 단 하나의 칼럼 PK(PRIMARY KEY) - 기본키라고 부른다.
+       PRIMARY KEY   테이블에는 테이블을 관리하는 ex)회원번호, 블로그번호 같은 칼럼이 꼭 들어가 있다
+                     여기서 회원번호, 블로그 번호가 PK이다.
+                     PK 값은 NOT NULL 이고 UNIQUE 여야 하지만 명시할 땐 NOT NULL 키워드만 적어준다.
+                     칼럼에 밑줄이 쳐져 있다.
+    5. 참조 무결성  - 참조하는 값만 가질 수 있다. (메모장에 설명)
+       FOREIGIN KEY   관계를 맺은 칼럼이 존재하지 않다면 참조 무결성에 위배된것이다.
+  
+        
         
     
 */
@@ -56,7 +65,7 @@ CREATE TABLE PRODUCT(
     CATEGORY     VARCHAR2(5 BYTE)  CHECK(CATEGORY= 'MAIN' OR CATEGORY = 'SUB'), -- CHECK(CATEGORY IN('MAIN', 'SUB')) : CATEGORY가 MAIN과 SUB중 하나다. OR을 쓰는건 현실적으로 없다.
     PRICE        NUMBER            CHECK(PRICE >= 0), 
     AMOUNT       NUMBER(2)         CHECK(AMOUNT >= 0 AND AMOUNT <= 100),        -- CHECK(AMOUNT BETWEEN 0 AND 100) : AMOUNT가 0과 100사이이다.(0과 100 포함)
-    MANUFACTURED DATE
+    MANUFACTURED DATE 
 );
 
     
