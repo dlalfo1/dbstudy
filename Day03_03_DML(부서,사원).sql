@@ -12,6 +12,7 @@
 
 -- 참고. 자격증에서는 DML을 INSERT,UPDATE,DELETE + SELECT로 보는 경우도 있다.
 
+-- 테이블 삭제
 DROP TABLE EMPLOYEE_TBL;
 DROP TABLE DEPARTMENT_TBL;
  
