@@ -22,6 +22,7 @@ SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME
 -- 1) 숫자를 문자로 변환하기
 -- 100  -> '100'
 -- 1000 -> '1,000'
+
 SELECT
        TO_CHAR(100)             -- '100'
      , TO_CHAR(100, '999999')   -- '   100'
@@ -60,7 +61,7 @@ SELECT
 -- 어떤 날짜를 어떤 방법으로 해석해야 하는지 알려주는 함수가 TO_DATE 이다.
 SELECT
        TO_DATE('05/06/07', 'YY/MM/DD')
-     , TO_DATE('05/06/07', 'MM/DD/YY')
+     , TO_DATE('05/06/07', 'MM/DD/YY') -- 왜 06/05/07이 아닌가..?
   FROM
        DUAL;
 
@@ -68,7 +69,7 @@ SELECT
 SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, HIRE_DATE
   FROM EMPLOYEES
  WHERE TO_DATE(HIRE_DATE, 'YY/MM/DD') BETWEEN TO_DATE('00/01/01', 'YY/MM/DD') AND TO_DATE('05/12/31', 'YY/MM/DD');
-
+-- 입사일을 일단 2000/01/01로 자르고 그걸또 2005/12/31 까지 자르기
 -- 날짜 비교는 TO_DATE 함수를 이용하자!
 
 DROP TABLE SAMPLE_TBL;
@@ -93,9 +94,9 @@ SELECT DT1
 -- 됨  
 SELECT DT1
   FROM SAMPLE_TBL
- WHERE TO_DATE(DT1, 'YY/MM/DD') = TO_DATE('23/02/07', 'YY/MM/DD'); -- 날짜 비교할 때 잘 모르겠음 TO_DATE 다 가져다 쓰세요.
-
-/* 원하는 형식으로 바꾸는 건 TO_CHAR 정말 순수한 날짜 데이터를 만들어주는게 TO_DATE */
+ WHERE TO_DATE(DT1, 'YY/MM/DD') = TO_DATE('23/02/07', 'YY/MM/DD');
+ 
+/* !!!!!!!!!!!! 원하는 형식으로 바꾸는 건 TO_CHAR 정말 순수한 날짜 데이터를 만들어주는게 TO_DATE !!!!!!!!!!!! */
 
 -- 다시 한 번 주의!
 SELECT

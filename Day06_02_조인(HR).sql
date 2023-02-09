@@ -6,6 +6,7 @@
 */
 
 -- 모든 사원들의 EMPLOYEE_ID, FIRST_NAME, LAST_NAME, MANAGER의 FIRST_NAME을 조회하시오.
+--              EMPLOYEES     EMPLOYEES   EMPLOYEES  EMPLOYEES
 -- 1:M 관계 파악
 -- PK               FK
 -- EMPLOYEE_ID      MANAGER_ID
@@ -27,23 +28,24 @@ SELECT
        EMPLOYEES E LEFT OUTER JOIN EMPLOYEES M -- 스티븐킹의 매니저번호는 null이기 때문에 스티븐킹 까지 조회하려면 왼쪽 외부 조인을 사용해야 한다.
                                                -- 보통 셀프조인은 내부조인으로 처리하나 이 예제는 외부조인으로 처리해야 한다.
     ON 
-       E.MANAGER_ID = M.EMPLOYEE_ID(+) -- 이해안감.
+       E.MANAGER_ID = M.EMPLOYEE_ID(+) 
  ORDER BY
        E.EMPLOYEE_ID;
     
 -- 셀프 조인 연습.
 -- 각 사원 중에서 매니저보다 먼저 입사한 사원을 조회하시오.
+-- 사원과 매니저를 각각의 테이블이라고 생각해보자.
 
-SELECT 
-       E.EMPLOYEE_ID, E.FIRST_NAME, E.HIRE_DATE AS 입사일자
-     , M.EMPLOYEE_ID, M.FIRST_NAME, M.HIRE_DATE AS 매니저입사일자
-  FROM
-       EMPLOYEES E INNER JOIN EMPLOYEES M
-    ON E.MANAGER_ID = M.EMPLOYEE_ID
- WHERE 
-       TO_DATE(E.HIRE_DATE, 'YY/MM/DD') < TO_DATE(M.HIRE_DATE, 'YY/MM/DD')
- ORDER BY
-       E.EMPLOYEE_ID;
+SELECT -- 무슨 칼럼 원해 골라
+       E.EMPLOYEE_ID, E.FIRST_NAME, E.HIRE_DATE AS 사원입사일자
+     , M.EMPLOYEE_ID, M.FIRST_NAME, M.HIRE_DATE AS 상사입사일자
+  FROM EMPLOYEES E INNER JOIN EMPLOYEES M -- 조인시킨 테이블들중에서 볼꺼야~
+  --  ON E.MANAGER_ID = M.EMPLOYEE_ID
+        ON M.MANAGER_ID = E.EMPLOYEE_ID
+ WHERE TO_DATE(E.HIRE_DATE, 'YY/MM/DD') < TO_DATE(M.HIRE_DATE , 'YY/MM/DD');
+  
+     
+        
     
 -- PK,FK가 아닌 일반 칼럼을 이요한 셀프 조인
 
@@ -70,6 +72,7 @@ SELECT
 -- 1. LOCATION_ID가 1700인 부서에 근무하는 사원들의 EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_NAME을 조회하시오
 
 -- 1) 표준 문법
+
 SELECT E.EMPLOYEE_ID, E.FIRST_NAME, D.DEPARTMENT_NAME
   FROM DEPARTMENTS D INNER JOIN EMPLOYEES E
     ON D.DEPARTMENT_ID = E.DEPARTMENT_ID -- 결합조건(PK,FK 조건 적으면 되는듯..?)
@@ -81,8 +84,7 @@ SELECT E.EMPLOYEE_ID, E.FIRST_NAME, D.DEPARTMENT_NAME
   FROM DEPARTMENTS D, EMPLOYEES E
  WHERE D.DEPARTMENT_ID = E.DEPARTMENT_ID
    AND D.LOCATION_ID = 1700; -- 추가 조건은 WHERE절에서 AND 키워드로 연결한다.
-   
-
+  
 -- 2. DEPARTMENT_NAME이 'Executive'인 부서에 근무하는 사원들의 EMPLOYEE_ID, FIRST_NAME을 조회하시오
 
 -- 1) 표준 문법
@@ -101,7 +103,7 @@ SELECT E.EMPLOYEE_ID, E.FIRST_NAME
 
 -- 3. 모든 사원들의 EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_NAME, CITY를 조회하시오.
 -- EMPLOYEE_ID      FIRST_NAME      DEPARTMENT_NAME     CITY
--- EMPLOYEES        EMPLOYEES       DEPARTMNETS         LOCATDION
+-- EMPLOYEES        EMPLOYEES       DEPARTMNETS         LOCATION 이걸 다 조회하려면 어쩌겠어 하나씩 하는거야 더많이가진사람부터
 
 -- 1) 표준문법
 SELECT E.EMPLOYEE_ID, E.FIRST_NAME, D.DEPARTMENT_NAME, L.CITY
@@ -110,33 +112,32 @@ SELECT E.EMPLOYEE_ID, E.FIRST_NAME, D.DEPARTMENT_NAME, L.CITY
     INNER JOIN EMPLOYEES E -- EMPLOYEES 테이블이랑 또 조인해주기.
     ON D.DEPARTMENT_ID = E.DEPARTMENT_ID;
     
+    
 -- 2) 오라클 문법
 SELECT E.EMPLOYEE_ID, E.FIRST_NAME, D.DEPARTMENT_NAME, L.CITY
   FROM LOCATIONS L, DEPARTMENTS D, EMPLOYEES E -- 오라클 문법을 일단 FROM에 관련된 테이블을 다 넣어준다.
  WHERE L.LOCATION_ID = D.LOCATION_ID                                  -- 여기에 또 ,EMPLOYEES E 하는거 아님 주의!
    AND D.DEPARTMENT_ID = E.DEPARTMENT_ID;    
+
   
 -- 4. 부서별 DEPARTMENT_NAME과 사원 수와 평균 연봉을 조회하시오.
 --    GROUP BY와 JOIN 함께 사용해보기
+
+-- DEPARTMENT_NAME          연봉                     사원수 전체
+-- DEPARTMENTS              EMPLOYEES(SALARY)          COUNT(*) 
+
 
 SELECT D.DEPARTMENT_NAME, COUNT(*), AVG(SALARY) -- 조회할 칼럼에 아예 함수를 넣어서 조회하는거임.
   FROM DEPARTMENTS D INNER JOIN EMPLOYEES E
     ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
  GROUP BY D.DEPARTMENT_ID, D.DEPARTMENT_NAME; -- 집계함수 쓸 때 그룹바이 사용
  
- -- GROUP BY절에는 SELECT절(조회할 칼럼)에 오는 칼럼이 무조건 와야한다. (너가 보고 싶은 칼럼이 있니? 그럼 그룹바이에 넣어!)
- -- 하지만! GROUP BY절에는 SELECT절에 없는 칼럼을 넣어도 상관없다.
- -- 예를 들어 회원별 구매총액을 구할 경우 이름만 그룹화 한다면 
- -- 이름만 같고 다른회원인 경우일시에 같은 이름으로 그룹화 되는 일이 발생한다.
- -- 그래서 보통 이름으로 그룹화하지 않지만 할 거면 회원번호도 넣어서 한다.
-                             
 
--- 부서별 DEPARTMENT_ID과 사원 수와 평균 연봉을 조회하시오.
-SELECT DEPARTMENT_ID, COUNT(*), AVG(SALARY)
-  FROM EMPLOYEES
- GROUP BY DEPARTMENT_ID;
-    
--- 5. 모든 사원들의 EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_NAME을 조회하시오
+-- 5. 모든 사원들의 EMPLOYEE_ID, FIRST_NAME, DEPARTMENT_NAME을 조회하시오.
+
+--       EMPLOYEE_ID        FIRST_NAME          DEPARTMENT_NAME
+--        EMPLOYEES             EMPLOYEES           DEPARTMNETS
+
 -- 1)표준 문법
 SELECT E.EMPLOYEE_ID, E.FIRST_NAME, D.DEPARTMENT_NAME
   FROM DEPARTMENTS D RIGHT OUTER JOIN EMPLOYEES E
@@ -149,6 +150,7 @@ SELECT E.EMPLOYEE_ID, E.FIRST_NAME, D.DEPARTMENT_NAME
  WHERE D.DEPARTMENT_ID(+) = E.DEPARTMENT_ID  -- DEPARTMENT_ID 값이 null인 사원도 불러오기 위해서(+) 표시를 해준다.아
   ORDER BY E.EMPLOYEE_ID;
   
+
 -- 6. 모든 부서의 DEPARTMENT_NAME과 근무 중인 사원 수를 조회하시오. 근무하는 사원이 없으면 0으로 조회하시오.
 -- DEPARTMENTS의 DEPARTMENT_ID가 EMPLOYEES의 DEPARTMENT_ID엔 없는 경우가 있음
 
@@ -157,22 +159,6 @@ SELECT D.DEPARTMENT_NAME, COUNT(E.EMPLOYEE_ID) -- COUNT(*)을 쓸 경우 칼럼 
   FROM DEPARTMENTS D LEFT OUTER JOIN EMPLOYEES E
     ON D.DEPARTMENT_ID = E.DEPARTMENT_ID 
  GROUP BY D.DEPARTMENT_ID, D.DEPARTMENT_NAME;
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        
     
     
