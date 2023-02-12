@@ -12,9 +12,20 @@ CREATE TABLE MEMBER_TBL(
        ID VARCHAR2(30 BYTE)  NOT NULL UNIQUE,
        PW VARCHAR2(30 BYTE)  NOT NULL,
     POINT NUMBER NULL,
-    GRADE VARCHAR2(10 BYTE)  NULL CHECK(GRADE IN('VIP', 'GOLD', 'SILVER', 'BRONZE')), 
-    EMAIL VARCHAR2(100 BYTE) NULL UNIQUE
-);    
+    GRADE VARCHAR2(10 BYTE)  NULL CHECK(GRADE IN('VIP', 'GOLD', 'SILVER', 'BRONZE')),  -- CHECK IN 제약 조건 INSERT 키워드로 행에 넣을 문자열을 제한한다.
+    EMAIL VARCHAR2(100 BYTE) NULL UNIQUE                                               -- GAEDE열엔 'VIP', 'GOLD', 'SILVER', 'BRONZE' 문자열만 올 수 있다.
+);                                                                                     -- 그 외의 문자열을 넣으면 체크 제약조건이 위배되었다는 에러가 뜬다
+
+
+INSERT INTO MEMBER_TBL(MEMBER_NO) VALUES(3);
+INSERT INTO MEMBER_TBL(ID) VALUES('이미래');
+INSERT INTO MEMBER_TBL(PW) VALUES('1111');
+INSERT INTO MEMBER_TBL(POINT) VALUES(777);
+INSERT INTO MEMBER_TBL(GRADE) VALUES('VVV');
+INSERT INTO MEMBER_TBL(EMAIL) VALUES('AAA@AAA.CO.KR'); -- INSERT 키워드 사용해서 행 삽입할 때 이따위로 하나씩 나눠서 삽입하면 당연히 안 됨.
+
+INSERT INTO MEMBER_TBL(MEMBER_NO, ID, PW, POINT, GRADE, EMAIL) VALUES(3, '이미래', '1111', 777, 'VIP', 'AAA@AAA.CO.KR'); -- 이렇게 한 행은 한번에 생성해야한다.
+COMMIT;
 
 -- 2. MEMBER_TBL 테이블에 다음 새로운 칼럼을 추가하시오. 
 --    1) 회원주소: ADDRESS VARCHAR2(200 BYTE)
@@ -78,13 +89,13 @@ ALTER TABLE BOARD_TBL
 -- 11. 작성자 칼럼에 MEMBER_TBL 테이블의 회원아이디를 참조하는 FK_BOARD_MEMBER 외래키를 설정하시오.
 -- 게시글을 작성한 회원 정보가 삭제되면 해당 회원이 작성한 게시글도 모두 함께 지워지도록 처리하시오.
 
---ALTER TABLE BOARD_TBL
---        ADD CONSTRAINT FK_BOARD_MEMBER FOREIGN KEY(WRITER)
-
-
-
-
-
-
+ALTER TABLE BOARD_TBL
+        ADD CONSTRAINT FK_BOARD_MEMBER FOREIGN KEY(WRITER)
+        REFERENCES MEMBER_TBL(ID)
+        ON DELETE CASCADE;
+        
 
 -- 12. MEMBER_TBL 테이블과 BOARD_TBL 테이블을 모두 삭제하시오.
+
+DROP TABLE BOARD_TBL;
+DROP TABLE MEMBER_TBL;

@@ -38,13 +38,11 @@ SELECT
   FROM 
        EMPLOYEES
  WHERE
-       DEPARTMENT_ID IS NOT NULL -- WHERE절에서 조건걸어서 NULL값 빼고 보고싶다고 선택하는거랑
-                                 -- HAVING절 써서 GROUP BY절에 옵션걸어주는거랑 결과출력물은 같다.
-                                 -- 하지만 WHERE절을 쓰는게 성능상 훨씬 좋다.
-                                 -- WHERE절을 써서 그룹화할 덩어리를 줄여주는게 좋다. 근데 이것도 때에 따라 다른데,
-                                 -- 그룹화를 해야만 사용할 수 있는 조건은 HAVING절을 써야하기 때문.
+       DEPARTMENT_ID IS NOT NULL -- WHERE절에서 조건걸어서 NULL값 빼고 보고싶다고 선택하는것과 HAVING절 써서 GROUP BY절에 옵션걸어주는거랑 결과출력물은 같다.
+                                 -- 하지만 WHERE절을 쓰는게 성능상 훨씬 좋다. WHERE절을 써서 그룹화할 덩어리를 줄여주는게 좋다. 
+                                 -- 근데 이것도 때에 따라 다른데, 그룹화를 해야만 사용할 수 있는 조건은 HAVING절을 써야하기 때문.
                                  -- ex) 부서별 인원수가 5명 이하인 부서를 조회시
-                                 --     부서별 인원수를 먼저 GROUP BY 해야만 5명 이하인 부서를 조회할 수 있기 때문에 HAVING절을 쓴다.
+                                 --      부서별 인원수를 먼저 GROUP BY 해야만 5명 이하인 부서를 조회할 수 있기 때문에 HAVING절을 쓴다.
  GROUP BY
        DEPARTMENT_ID; 
 
@@ -61,8 +59,6 @@ SELECT
        
 -- 위 순서 정리
 -- FROM절 후 GROUP BY절이 먼저 실행돼서 DEPARTMENT_ID를 중복제거 해서 가져와주고 SELECT절이 실행된다.
-
-
 
 /*
     조건 지정하기

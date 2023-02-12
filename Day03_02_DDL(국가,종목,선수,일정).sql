@@ -11,7 +11,7 @@
             ALTER TABLE 테이블명 ADD CONSTRAINT 제약조건명 FOREIGN KEY(칼럼) REFERENCES 부모테이블(참조칼럼) [옵션]
         2) 삭제
             ALTER TABLE 테이블명 DROP CONSTRAINT 제약조건명;
-*/
+*/ 
 
 -- 테이블 삭제
 DROP TABLE SCHEDULE_TBL;

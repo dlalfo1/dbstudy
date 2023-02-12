@@ -34,7 +34,7 @@ CREATE TABLE EMPLOYEE_TBL(
     SALARY    NUMBER            NULL
 );    
 
-    
+    d
 -- 기본키 
 ALTER TABLE DEPARTMENT_TBL
     ADD CONSTRAINT PK_DEPT PRIMARY KEY(DEPT_NO);
@@ -66,7 +66,7 @@ CREATE  SEQUENCE DEPARTMENT_SEQ
                                   
 -- 데이터 입력하기(PARENT KEY를 먼저 입력해야 한다.)
 -- 시퀀스를 활용해야 자바로 시퀀스까지 반복문으로 돌릴 수 있고, 부서와 지역은 사용자가 입력하는 내용을 받아서 활용하며 된다.
-INSERT INTO DEPARTMENT_TBL(DEPT_NO, DEPT_NAME, LOCATION) VALUES(DEPARTMENT_SEQ.NEXTVAL, '영업부', '대구'); -- 시퀀스 사용하는 방법 : 번호생성기이름.NETXVAL
+INSERT INTO DEPARTMENT_TBL(DEPT_NO, DEPT_NAMXE, LOCATION) VALUES(DEPARTMENT_SEQ.NEXTVAL, '영업부', '대구'); -- 시퀀스 사용하는 방법 : 번호생성기이름.NETXVAL
 INSERT INTO DEPARTMENT_TBL(DEPT_NO, DEPT_NAME, LOCATION) VALUES(DEPARTMENT_SEQ.NEXTVAL, '인사부', '서울'); -- 번호생성은 시퀀스가 알아서 하니까 번호를 뽑기만 하면 된다.
 INSERT INTO DEPARTMENT_TBL(DEPT_NO, DEPT_NAME, LOCATION) VALUES(DEPARTMENT_SEQ.NEXTVAL, '총무부', '대구');
 INSERT INTO DEPARTMENT_TBL(DEPT_NO, DEPT_NAME, LOCATION) VALUES(DEPARTMENT_SEQ.NEXTVAL, '기획부', '서울'); -- 번호를 네번 생성했으니 4번임.
@@ -108,7 +108,7 @@ DELETE FROM DEPARTMENT_TBL WHERE LOCATION = '대구'; -- 대구에서 근무하�
 COMMIT;
 
 -- 2. 지역(LOCATION)이 '서울'인 부서를 삭제하시오.
-DELETE FROM DEPARTMENT_TBL WHERE LOCATION = '서울'; -- 이은영과 한성일 행이 사라진 건 아니지만 EMPLOYEE 테이블의 DEPART값이 NULL로 바뀐다
+DELETE FROM DEPARTMENT_TBL WHERE LOCATION = '서울'; -- 이은영과 한성일 행이 사라진 건 아니지만 EMPLOYEE 테이블의 DEPART(부서번호)값이 NULL로 바뀐다
                                                     -- 부서번호(DEPART)가 ON DELETE SET NULL 외래키 옵션에 의해서 NULL로 처리된다.
                                                     -- 만약 SET NULL 옵션 지정을 안 해줬다면? 이 쿼리는 실행할 수 없다. 부모키가 들어간 테이블을 삭제할 수 없다.
                                                     
