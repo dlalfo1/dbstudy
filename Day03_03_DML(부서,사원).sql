@@ -34,7 +34,7 @@ CREATE TABLE EMPLOYEE_TBL(
     SALARY    NUMBER            NULL
 );    
 
-    d
+    
 -- 기본키 
 ALTER TABLE DEPARTMENT_TBL
     ADD CONSTRAINT PK_DEPT PRIMARY KEY(DEPT_NO);
@@ -50,7 +50,7 @@ ALTER TABLE EMPLOYEE_TBL
 DROP SEQUENCE DEPARTMENT_SEQ;
             
 -- 시퀀스(번호 생성기) 만들기 (이름은 내 마음대로 준다.)
-CREATE  SEQUENCE DEPARTMENT_SEQ 
+CREATE  SEQUENCE DEPARTMENT_SEQ;
     INCREMENT BY 1 -- 1씩 증가하는 번호를 만든다. (생략 가능)
     START WITH 1   -- 1부터 만든다.(생략 가능)
     NOMAXVALUE     -- 번호의 상한선이 없다. (생략 가능)  MAXVALUE 100 : 번호를 100까지만 생성한다.
