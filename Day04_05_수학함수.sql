@@ -31,8 +31,8 @@ SELECT SQRT(25) FROM DUAL;
 -- 6. 정수로 올림
 --    CEIL(A) : 실수 A를 A보다 큰 정수로 올린 값을 반환
 SELECT 
-       CEIL(1.1)
-     , CEIL(-1.1)
+       CEIL(1.1) -- 2
+     , CEIL(-1.1) -- -1
   FROM 
        DUAL;
   
