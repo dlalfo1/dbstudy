@@ -46,12 +46,5 @@ CREATE INDEX IND_NAME -- 인덱스 별명설정
 
 -- 인덱스 삭제하기
 -- DROP INDEX 인덱스별명;
-DROP INDEX IND_NAME;
-
-
-
-
-
-
-
+DROP INDEX IND_NAM
 
