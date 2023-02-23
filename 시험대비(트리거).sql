@@ -1,0 +1,15 @@
+-- 삽입/삭제/수정하면 메세지를 출력하는 트리거 만들기
+
+SET SERVEROUTPUT ON;
+
+CREATE OR REPLACE TRIGGER MY_TRIGGER
+    AFTER 
+    INSERT OR DELETE OR UPDATE 
+    ON DEPARTMENT_TBL
+    FOR EACH ROW 
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('하하하하하');
+END;       
+
+INSERT INTO DEPARTMENT_TBL(DEPT_NO, DEPT_NAME, LOCATION) VALUES(5, '개발부', '서울');
+-- 내가 확인하려고 쓴 쿼리문은 시험에 제출하지 않아도 된다.
