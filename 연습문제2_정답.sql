@@ -308,17 +308,40 @@ SELECT C.CUSTOMER_NAME AS 고객명
 
 
 -- 13. 가장 최근에 구매한 고객의 이름과 구매내역(책이름, 주문일자)을 조회하시오.
--- 고객명  책이름            주문일자
--- 장미란  역도 단계별 기술  20/07/10
+-- 고객명                         책이름            주문일자
+-- 장미란                         역도 단계별 기술  20/07/10
+  CUSTOMER_TBL                     BOOK_TBL        ORDER_TBL
 
-SELECT C.CUSTOMER_NAME AS 고객명
+SELECT C.CUSTOMER_NAME AS 고객명, B.BOOK_NAME AS 책이름, O.ORDER_DATE AS 주문일자
+  FROM CUSTOMER_TBL C INNER JOIN ORDER_TBL O
+    ON C.CUSTOMER_ID = O.CUSTOMER_ID INNER JOIN BOOK_TBL B
+    ON O.BOOK_ID = B.BOOK_ID
+ WHERE O.ORDER_DATE = (SELECT MAX(ORDER_DATE)
+                         FROM ORDER_TBL);
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*SELECT C.CUSTOMER_NAME AS 고객명
      , B.BOOK_NAME AS 책이름
      , O.ORDER_DATE AS 주문일자
   FROM CUSTOMER_TBL C INNER JOIN ORDER_TBL O
     ON C.CUSTOMER_ID = O.CUSTOMER_ID INNER JOIN BOOK_TBL B
     ON B.BOOK_ID = O.BOOK_ID
  WHERE O.ORDER_DATE = (SELECT MAX(ORDER_DATE)
-                         FROM ORDER_TBL);
+                         FROM ORDER_TBL);*/
 
 
 -- 14. 모든 서적 중에서 가장 비싼 서적을 구매한 고객의 이름과 구매내역(책이름, 가격)을 조회하시오.

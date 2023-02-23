@@ -13,3 +13,5 @@ END;
 
 INSERT INTO DEPARTMENT_TBL(DEPT_NO, DEPT_NAME, LOCATION) VALUES(5, '개발부', '서울');
 -- 내가 확인하려고 쓴 쿼리문은 시험에 제출하지 않아도 된다.
+
+
