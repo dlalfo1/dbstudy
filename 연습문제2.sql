@@ -357,3 +357,7 @@ SELECT A.고객명, A.총구매액
 WHERE A.RN BETWEEN 2 AND 3;
   
   
+
+
+
+

@@ -39,6 +39,7 @@
      위 문장을 실행하고 싶다면 블럭잡지 않고 커서만 두어도 된다 한문장 이므로     
 */
 
+-- 삭제하려는 계정에 접속되어있으면 접속해제부터 해야함
 DROP USER GDJ61 CASCADE;  -- 생성자 삭제
 CREATE USER GDJ61 IDENTIFIED BY 1111; -- 생성자 생성
 GRANT DBA TO GDJ61; -- GBA 권한 설정

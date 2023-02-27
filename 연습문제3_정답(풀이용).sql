@@ -105,31 +105,30 @@ COMMIT;
 
 -- 1. 제품 테이블에서 제품명이 '책'인 제품의 카테고리를 '서적'으로 수정하시오.
 UPDATE PRODUCTS
-   SET PROD_NAME = '서적'
+   SET PROD_CATEGORY = '서적'
  WHERE PROD_NAME = '책';
-COMMIT;
-
 
 -- 2. 연락처1이 '011'인 사용자의 연락처1을 모두 '010'으로 수정하시오.
 UPDATE USERS
    SET USER_MOBILE1 = '010'
  WHERE USER_MOBILE1 = '011';
- COMMIT;
 
-
--- 3. 사용자 테이블에서 사용자번호가 5인 사용자를 삭제하시오.
---    사용자번호가 5인 사용자의 구매 내역을 먼저 삭제한 뒤 진행하시오.
+-- 3. 사용자 테이블에서 사용자번호가 4인 사용자를 삭제하시오. (5는 이미 삭제해서 4로 다시 풀기)
+--    사용자번호가 4인 사용자의 구매 내역을 먼저 삭제한 뒤 진행하시오.
 -- PK를 삭제하려면 FK먼저 지워줘야 한다.
+
 DELETE FROM BUYS 
- WHERE USER_ID = (사용자번호가 5번인 사용자의 USER_ID);
+      WHERE USER_ID = (SELECT USER_ID
+                         FROM USERS
+                        WHERE USER_NO = 4);
+
+DELETE FROM USERS
+      WHERE USER_NO = 4;
+
 -- BUYS에는 USER_NO가 없으므로 서브쿼리문으로 해결해줘야한다.
-DELETE FROM BUYS
- WHERE USER_ID = (SELECT USER_ID
-                    FROM USERS
-                   WHERE USER_NO = 5);
-DELETE FROM USERS 
- WHERE USER_NO = 5;
- 
+
+
+
 
 -- 4. 연락처1이 없는 사용자의 사용자번호, 아이디, 연락처1, 연락처2를 조회하시오.
 SELECT USER_NO, USER_ID, USER_MOBILE1, USER_MOBILE2
@@ -152,33 +151,32 @@ WHERE USER_MOBILE2 LIKE '5%'; -- 어떤 단어로 시작한다~ 할 때 % 사용
 -- GROUP BY를 사용할 때 집계함수를 함께 사용한다.
 -- COUNT 함수는 대체로 (*) 전체조회하면 맞다. 
 -- SELECT절에서 조회하려는 정보는 GROUP BY절에 반드시 들어가야 한다.
+
 SELECT USER_ID AS 아이디, COUNT(*) AS 구매횟수
   FROM BUYS
  GROUP BY USER_ID;
 
 
-
 -- 7. 제품을 구매한 이력이 있는 고객의 아이디, 고객명, 구매횟수, 총구매액을 조회하시오.
--- 아이디  고객명               구매횟수  총구매액
--- BUYS     USERS => JOIN        => GROUP BY
+-- 아이디  고객명               구매횟수            총구매액
+-- BUYS     USERS => JOIN        => GROUP BY         =PRODUCTS
 
 -- LHJ     이휘재  2         80
 -- KYM     김용만  1         200
 -- KHD     강호동  3         1210
 -- PSH     박수홍  3         1860
 
-SELECT U.USER_ID AS 아이디 
-     , U.USER_NAME AS 고객명
-     , COUNT(*) AS 구매횟수
-     , SUM(B.BUY_AMOUNT*P.PROD_PRICE) AS 총구매액
+SELECT U.USER_ID, U.USER_NAME, COUNT(*), SUM(B.BUY_AMOUNT * P.PROD_PRICE)
   FROM USERS U INNER JOIN BUYS B
     ON U.USER_ID = B.USER_ID INNER JOIN PRODUCTS P
-    ON B.PROD_CODE = P.PROD_CODE 
- GROUP BY U.USER_ID, U.USER_NAME
+    ON P.PROD_CODE = B.PROD_CODE
+ GROUP BY U.USER_ID, U.USER_NAME;
+
 
 -- 8. 구매 이력과 상관 없이 고객별 구매횟수를 조회하시오.
 --    구매 이력이 없는 경우 구매횟수는 0으로 조회하시오. => 구매 이력이 없어도 조회할 수 있도록 외부조인하라.
 --    아이디, 고객명, 구매횟수를 아이디의 오름차순으로 조회하시오.
+--     USERS  USERS    BUY_AMOUNT
 -- 아이디  고객명  구매횟수
 -- KHD     강호동  3
 -- KKJ     김국진  0
@@ -258,7 +256,6 @@ SELECT U.USER_ID AS 아이디, U.USER_NAME AS 고객명, COUNT(*) -- COUNT(*) �
 -- 박수홍   메모리
 -- 신동엽   NULL
 -- 유재석   NULL
-
 
 -- 외부 조인으로 풀어보기
 SELECT U.USER_NAME AS 고객명, P.PROD_NAME AS 구매제품
