@@ -173,6 +173,13 @@ SELECT D.DNAME AS 학과명, COUNT(S.STUDNO) AS 학생수
     ON D.DEPTNO = S.DEPTNO
 GROUP BY D.DNAME;
 
+SELECT D.DNAME AS 학과명, COUNT(S.STUDNO) AS 학생수
+
+FROM DEPARTMENT D LEFT OUTER JOIN STUDENT S
+
+ON D.DEPTNO = S.DEPTNO
+
+GROUP BY D.DEPTNO, D.DNAME
 
 /*
 9.
@@ -277,5 +284,53 @@ EXCEPTION
       DBMS_OUTPUT.PUT_LINE(SQLERRM);  
       ROLLBACK; 
 END;
+
+EXECUTE MY_PROC(101); 
+
+/*
+    13. 
+    학과번호를 전달하면 해당 학과에 소속된 학생, 교수, 학과를 모두 삭제하는 MY_PROC 프로시저를 작성하시오.
+    예외가 발생할 경우를 대비해 예외코드와 예외메시지를 출력할 수 있도록 프로시저를 작성하시오.
+    프로시저가 정상 동작하면 COMMIT, 예외가 발생하면 ROLLBACK 처리하시오.
+       1) 프로시저를 작성하시오. (8점)
+       2) 학과번호가 101인 학과를 대상으로 프로시저 실행 방법을 작성하시오. (2점)
+*/
+
+
+1)
+
+CREATE OR REPLACE PROCEDURE MY_PROC(DNO IN DEPARTMENT.DEPTNO%TYPE)
+
+IS
+
+    PNO PROFESSOR.PROFNO%TYPE;
+
+BEGIN
+
+    DELETE FROM STUDENT WHERE DEPTNO = DNO;
+
+    SELECT PROFNO 
+      INTO PNO 
+      FROM DEPARTMENT
+     WHERE DEPTNO = DNO;
+
+    DELETE FROM DEPARTMENT WHERE DEPTNO = DNO;
+
+    DELETE FROM PROFESSOR WHERE PROFNO = PNO;
+
+    COMMIT;
+
+EXCEPTION
+
+    WHEN OTHERS THEN
+
+        DBMS_OUTPUT.PUT_LINE(SQLCODE);
+
+        DBMS_OUTPUT.PUT_LINE(SQLERRM);
+
+        ROLLBACK;
+
+END;
+
 
 EXECUTE MY_PROC(101); 
